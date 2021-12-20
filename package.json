@@ -1,0 +1,13 @@
+{
+  "name": "olympus-radio",
+  "version": "2.0.0",
+  "description": "Radio for Olympus",
+  "main": "app.js",
+  "keywords": [],
+  "author": "Tinte",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.5.3",
+    "discord.js": "^13.3.1"
+  }
+}
