@@ -51,6 +51,7 @@ exports.getStation = function(string){
     }
 }
 
+
 exports.addStation = async function(name, url){
     let json = JSON.parse(fs.readFileSync('./stations.json'));
     let count = (parseInt(await this.stationCount()))+1;
