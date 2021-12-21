@@ -37,7 +37,6 @@ module.exports = {
 
             let stationId = interaction.values[0];
             let station = stationManager.getStation(stationId);
-            console.log(station);
             if(!station) return;
 
             let embed = new MessageEmbed()

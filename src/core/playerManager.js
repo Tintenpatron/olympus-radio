@@ -2,6 +2,7 @@ const config = require('../../config.json');
 const presenceManager = require('../helper/presenceManager');
 const {
     joinVoiceChannel,
+    getVoiceConnection,
     createAudioPlayer,
     createAudioResource,
     entersState,
@@ -58,6 +59,21 @@ exports.initiate = async function(client){
             console.error(error);
         }
     }
+
+    setInterval(async () => {
+        let connection = getVoiceConnection(config.guild);
+        connection.destroy();
+
+        let channel = client.channels.cache.get(config.channel);
+        if(channel){
+            try {
+                const connection = await connectToChannel(channel);
+                connection.subscribe(player);
+            }catch(error){
+                console.error(error);
+            }
+        }
+    }, 7200000)
 }
 
 exports.play = async function(url, name){
@@ -67,3 +83,4 @@ exports.play = async function(url, name){
         console.error(error);
     }
 }
+
