@@ -1,5 +1,5 @@
 node_modules/
 .idea/
-storage/config.json
-storage/stations.json
+config.json
+stations.json
 package-lock.json
