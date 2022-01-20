@@ -1,5 +1,6 @@
 const config = require('../../config.json');
 const presenceManager = require('../helper/presenceManager');
+
 const {
     joinVoiceChannel,
     getVoiceConnection,
@@ -9,7 +10,10 @@ const {
     StreamType,
     AudioPlayerStatus,
     VoiceConnectionStatus
-} = require('@discordjs/voice')
+} = require('@discordjs/voice');
+
+const stationManager = require('./stationManager');
+const connectionListener = require('../helper/connectionListener');
 
 const player = createAudioPlayer();
 
@@ -17,7 +21,6 @@ function playUrl(url, name){
     const resource = createAudioResource(url, {
         inputType: StreamType.Arbitrary,
     });
-
     player.play(resource);
     presenceManager.update(name);
     return entersState(player, AudioPlayerStatus.Playing, 5e3);
@@ -28,9 +31,8 @@ async function connectToChannel(channel){
         channelId: channel.id,
         guildId: channel.guild.id,
         adapterCreator: channel.guild.voiceAdapterCreator,
-        selfDeaf: true,
+        selfDeaf: false,
     });
-
     try {
         await entersState(connection, VoiceConnectionStatus.Ready, 30e3);
         return connection;
@@ -60,20 +62,7 @@ exports.initiate = async function(client){
         }
     }
 
-    setInterval(async () => {
-        let connection = getVoiceConnection(config.guild);
-        connection.destroy();
-
-        let channel = client.channels.cache.get(config.channel);
-        if(channel){
-            try {
-                const connection = await connectToChannel(channel);
-                connection.subscribe(player);
-            }catch(error){
-                console.error(error);
-            }
-        }
-    }, 7200000)
+     await connectionListener.listen();
 }
 
 exports.play = async function(url, name){
